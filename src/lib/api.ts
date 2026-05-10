@@ -1,7 +1,11 @@
+const baseUrl =
+  process.env.NEXT_PUBLIC_BASE_URL ||
+  "http://localhost:3000";
+
 export async function fetchTrendingAnime() {
 
   const response = await fetch(
-    "http://localhost:3000/api/anime/trending",
+    `${baseUrl}/api/anime/trending`,
     {
       next: {
         revalidate: 3600,
@@ -9,15 +13,17 @@ export async function fetchTrendingAnime() {
     }
   );
 
-  const data = await response.json();
+  const data =
+    await response.json();
 
   return data.data;
+
 }
 
 export async function fetchLatestNews() {
 
   const response = await fetch(
-    "http://localhost:3000/api/news/latest",
+    `${baseUrl}/api/news/latest`,
     {
       next: {
         revalidate: 1800,
@@ -25,15 +31,17 @@ export async function fetchLatestNews() {
     }
   );
 
-  const data = await response.json();
+  const data =
+    await response.json();
 
   return data.data;
+
 }
 
 export async function fetchUpcomingAnime() {
 
   const response = await fetch(
-    "http://localhost:3000/api/anime/upcoming",
+    `${baseUrl}/api/anime/upcoming`,
     {
       next: {
         revalidate: 3600,
@@ -41,9 +49,11 @@ export async function fetchUpcomingAnime() {
     }
   );
 
-  const data = await response.json();
+  const data =
+    await response.json();
 
   return data.data;
+
 }
 
 export async function fetchAnimeById(
@@ -51,7 +61,7 @@ export async function fetchAnimeById(
 ) {
 
   const response = await fetch(
-    `http://localhost:3000/api/anime/${id}`,
+    `${baseUrl}/api/anime/${id}`,
     {
       next: {
         revalidate: 3600,
@@ -59,7 +69,9 @@ export async function fetchAnimeById(
     }
   );
 
-  const data = await response.json();
+  const data =
+    await response.json();
 
   return data.data;
+
 }
