@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 interface LatestNewsSectionProps {
-  news: any[];
+  news: AnimeMedia[];
 }
 
 export function LatestNewsSection({

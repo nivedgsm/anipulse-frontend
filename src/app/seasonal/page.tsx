@@ -121,7 +121,7 @@ export default async function SeasonalPage({
         {/* GRID */}
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
 
-          {anime.map((item: any) => (
+          {anime.map((item: AnimeMedia) => (
 
             <AnimeCard
               key={item.id}

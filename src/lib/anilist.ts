@@ -1,6 +1,62 @@
-const ANILIST_API =
-  "https://graphql.anilist.co";
+import { ANILIST_API } from "./constants";
 
+async function anilistFetch(
+  query: string,
+  variables?: Record<string, any>
+) {
+
+  try {
+
+    const response = await fetch(
+      ANILIST_API,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json",
+          Accept:
+            "application/json",
+        },
+
+        next: {
+          revalidate: 3600,
+        },
+
+        body: JSON.stringify({
+          query,
+          variables,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+
+      throw new Error(
+        `AniList API Error: ${response.status}`
+      );
+
+    }
+
+    const data =
+      await response.json();
+
+    return data;
+
+  } catch (error) {
+
+    console.error(
+      "AniList Fetch Error:",
+      error
+    );
+
+    return null;
+
+  }
+
+}
+
+/* TRENDING ANIME */
 export async function getTrendingAnime() {
 
   const query = `
@@ -33,7 +89,7 @@ export async function getTrendingAnime() {
 
           averageScore
 
-          description
+          description(asHtml: false)
 
           genres
 
@@ -48,32 +104,17 @@ export async function getTrendingAnime() {
     }
   `;
 
-  const response = await fetch(
-    ANILIST_API,
-    {
-      method: "POST",
+  const data =
+    await anilistFetch(query);
 
-      headers: {
-        "Content-Type":
-          "application/json",
-      },
-
-      next: {
-        revalidate: 3600,
-      },
-
-      body: JSON.stringify({
-        query,
-      }),
-    }
+  return (
+    data?.data?.Page?.media ||
+    []
   );
 
-  const data =
-    await response.json();
-
-  return data.data.Page.media;
 }
 
+/* UPCOMING ANIME */
 export async function getUpcomingAnime() {
 
   const query = `
@@ -121,32 +162,17 @@ export async function getUpcomingAnime() {
     }
   `;
 
-  const response = await fetch(
-    ANILIST_API,
-    {
-      method: "POST",
+  const data =
+    await anilistFetch(query);
 
-      headers: {
-        "Content-Type":
-          "application/json",
-      },
-
-      next: {
-        revalidate: 3600,
-      },
-
-      body: JSON.stringify({
-        query,
-      }),
-    }
+  return (
+    data?.data?.Page?.media ||
+    []
   );
 
-  const data =
-    await response.json();
-
-  return data.data.Page.media;
 }
 
+/* SINGLE ANIME */
 export async function getAnimeById(
   id: string
 ) {
@@ -167,7 +193,7 @@ export async function getAnimeById(
           native
         }
 
-        description
+        description(asHtml: false)
 
         bannerImage
 
@@ -252,35 +278,22 @@ export async function getAnimeById(
     }
   `;
 
-  const response = await fetch(
-    ANILIST_API,
-    {
-      method: "POST",
+  const data =
+    await anilistFetch(
+      query,
+      {
+        id: Number(id),
+      }
+    );
 
-      headers: {
-        "Content-Type":
-          "application/json",
-      },
-
-      next: {
-        revalidate: 3600,
-      },
-
-      body: JSON.stringify({
-        query,
-
-        variables: {
-          id: Number(id),
-        },
-      }),
-    }
+  return (
+    data?.data?.Media ||
+    null
   );
 
-  const data =
-    await response.json();
-
-  return data.data.Media;
 }
+
+/* SEARCH */
 export async function searchAnime(
   search: string
 ) {
@@ -321,35 +334,22 @@ export async function searchAnime(
     }
   `;
 
-  const response = await fetch(
-    ANILIST_API,
-    {
-      method: "POST",
+  const data =
+    await anilistFetch(
+      query,
+      {
+        search,
+      }
+    );
 
-      headers: {
-        "Content-Type":
-          "application/json",
-      },
-
-      body: JSON.stringify({
-        query,
-
-        variables: {
-          search,
-        },
-      }),
-
-      next: {
-        revalidate: 60,
-      },
-    }
+  return (
+    data?.data?.Page?.media ||
+    []
   );
 
-  const data =
-    await response.json();
-
-  return data.data.Page.media;
 }
+
+/* BROWSE */
 export async function getBrowseAnime({
   page = 1,
   genre = "",
@@ -400,39 +400,25 @@ export async function getBrowseAnime({
     }
   `;
 
-  const response = await fetch(
-    ANILIST_API,
-    {
-      method: "POST",
+  const data =
+    await anilistFetch(
+      query,
+      {
+        page,
+        genre:
+          genre || undefined,
+        sort,
+      }
+    );
 
-      headers: {
-        "Content-Type":
-          "application/json",
-      },
-
-      next: {
-        revalidate: 3600,
-      },
-
-      body: JSON.stringify({
-        query,
-
-        variables: {
-          page,
-          genre:
-            genre || undefined,
-          sort,
-        },
-      }),
-    }
+  return (
+    data?.data?.Page?.media ||
+    []
   );
 
-  const data =
-    await response.json();
-
-  return data.data.Page.media;
 }
 
+/* SEASONAL */
 export async function getSeasonalAnime({
   season,
   year,
@@ -487,43 +473,32 @@ export async function getSeasonalAnime({
     }
   `;
 
-  const response = await fetch(
-    ANILIST_API,
-    {
-      method: "POST",
+  const data =
+    await anilistFetch(
+      query,
+      {
+        season,
+        seasonYear: year,
+      }
+    );
 
-      headers: {
-        "Content-Type":
-          "application/json",
-      },
-
-      next: {
-        revalidate: 3600,
-      },
-
-      body: JSON.stringify({
-        query,
-
-        variables: {
-          season,
-          seasonYear: year,
-        },
-      }),
-    }
+  return (
+    data?.data?.Page?.media ||
+    []
   );
 
-  const data =
-    await response.json();
-
-  return data.data.Page.media;
 }
 
+/* REVIEW ANIME */
 export async function fetchReviewAnime() {
 
   const query = `
     query {
 
-      Page(page: 1, perPage: 12) {
+      Page(
+        page: 1,
+        perPage: 12
+      ) {
 
         media(
           sort: TRENDING_DESC
@@ -561,55 +536,12 @@ export async function fetchReviewAnime() {
     }
   `;
 
-  try {
+  const data =
+    await anilistFetch(query);
 
-    const response = await fetch(
-      "https://graphql.anilist.co",
-      {
-        method: "POST",
-
-        headers: {
-          "Content-Type":
-            "application/json",
-          Accept:
-            "application/json",
-        },
-
-        body: JSON.stringify({
-          query,
-        }),
-
-        next: {
-          revalidate: 3600,
-        },
-      }
-    );
-
-    if (!response.ok) {
-
-      throw new Error(
-        "Failed to fetch review anime"
-      );
-
-    }
-
-    const json =
-      await response.json();
-
-    return (
-      json?.data?.Page?.media ||
-      []
-    );
-
-  } catch (error) {
-
-    console.error(
-      "fetchReviewAnime error:",
-      error
-    );
-
-    return [];
-
-  }
+  return (
+    data?.data?.Page?.media ||
+    []
+  );
 
 }

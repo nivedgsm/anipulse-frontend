@@ -46,7 +46,7 @@ export default async function TrendingPage() {
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
 
           {animeList?.slice(0, 24).map(
-            (anime: any) => {
+            (anime: AnimeMedia) => {
 
               const imageUrl =
                 anime.coverImage

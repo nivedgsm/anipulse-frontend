@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface PopularSidebarProps {
-  anime: any[];
+  anime: AnimeMedia[];
 }
 
 export function PopularSidebar({

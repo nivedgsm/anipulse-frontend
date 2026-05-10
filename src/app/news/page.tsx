@@ -84,7 +84,7 @@ export default async function NewsPage() {
         {/* NEWS GRID */}
         <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
 
-          {latest.map((article: any) => (
+          {latest.map((article: AnimeMedia) => (
 
             <Link
               key={article.slug}

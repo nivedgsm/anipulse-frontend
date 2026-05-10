@@ -5,7 +5,7 @@ import { AnimeCard } from "@/components/anime/anime-card";
 import { FadeIn } from "@/components/shared/fade-in";
 
 interface TrendingAnimeSectionProps {
-  anime: any[];
+  anime: AnimeMedia[];
 }
 
 export function TrendingAnimeSection({

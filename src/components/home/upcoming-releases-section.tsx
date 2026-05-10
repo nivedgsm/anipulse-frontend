@@ -5,7 +5,7 @@ import { ReleaseCard } from "@/components/anime/release-card";
 import { FadeIn } from "@/components/shared/fade-in";
 
 interface UpcomingReleasesSectionProps {
-  anime: any[];
+  anime: AnimeMedia[];
 }
 
 export function UpcomingReleasesSection({

@@ -5,9 +5,9 @@ import { PopularSidebar } from "./popular-sidebar";
 import { FadeIn } from "@/components/shared/fade-in";
 
 interface EditorialSectionProps {
-  news: any[];
+  news: AnimeMedia[];
 
-  trendingAnime: any[];
+  trendingAnime: AnimeMedia[];
 }
 
 export function EditorialSection({

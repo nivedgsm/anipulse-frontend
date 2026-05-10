@@ -64,7 +64,8 @@ export default async function AnimePage({
             <Image
               src={
                 anime.coverImage?.extraLarge ||
-                anime.coverImage?.large
+                anime.coverImage?.large ||
+                "/placeholder-anime.jpg"
               }
               alt={
                 anime.title?.english ||
@@ -72,6 +73,10 @@ export default async function AnimePage({
                 "Anime"
               }
               fill
+              sizes="
+                (max-width: 768px) 100vw,
+                340px
+              "
               className="object-cover"
             />
 
@@ -115,51 +120,48 @@ export default async function AnimePage({
             <div className="mt-6 flex flex-wrap items-center gap-6 text-muted-foreground">
 
               <div>
-
-                ⭐{" "}
-                {anime.averageScore ||
-                  "N/A"}
-
+                ⭐ {anime.averageScore || "N/A"}
               </div>
 
               <div>
-
-                {anime.episodes ||
-                  "?"} Episodes
-
+                {anime.episodes || "?"} Episodes
               </div>
 
               <div>
-
-                {anime.duration ||
-                  "?"} mins
-
+                {anime.duration || "?"} mins
               </div>
 
               <div>
-
-                {anime.season}{" "}
-                {anime.seasonYear}
-
+                {anime.season} {anime.seasonYear}
               </div>
 
               <div>
-
                 {anime.status}
-
               </div>
 
             </div>
 
-            {/* DESCRIPTION */}
-            <div
-              className="prose prose-invert mt-8 max-w-none text-muted-foreground"
-              dangerouslySetInnerHTML={{
-                __html:
-                  anime.description ||
-                  "",
-              }}
-            />
+            {/* SAFE DESCRIPTION */}
+            <div className="prose mt-8 max-w-none dark:prose-invert prose-p:text-muted-foreground prose-headings:text-foreground">
+
+              {anime.description
+                ?.split("\n")
+                .map(
+                  (
+                    paragraph: string,
+                    index: number
+                  ) => (
+
+                    <p key={index}>
+
+                      {paragraph}
+
+                    </p>
+
+                  )
+                )}
+
+            </div>
 
             {/* STUDIOS */}
             <div className="mt-10">
@@ -237,7 +239,6 @@ export default async function AnimePage({
           className="container mx-auto px-4 py-20"
         >
 
-          {/* HEADER */}
           <div className="mb-8">
 
             <p className="text-sm font-medium uppercase tracking-wider text-violet-500">
@@ -254,7 +255,6 @@ export default async function AnimePage({
 
           </div>
 
-          {/* VIDEO */}
           <div className="overflow-hidden rounded-[32px] border border-border bg-card shadow-2xl">
 
             <div className="aspect-video">
@@ -275,12 +275,10 @@ export default async function AnimePage({
       )}
 
       {/* RECOMMENDATIONS */}
-      {anime.recommendations?.nodes
-        ?.length > 0 && (
+      {anime.recommendations?.nodes?.length > 0 && (
 
         <section className="container mx-auto px-4 py-20">
 
-          {/* HEADER */}
           <div className="mb-8">
 
             <p className="text-sm font-medium uppercase tracking-wider text-violet-500">
@@ -297,14 +295,13 @@ export default async function AnimePage({
 
           </div>
 
-          {/* CAROUSEL */}
           <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
 
             {anime.recommendations.nodes
               .slice(0, 12)
               .map(
                 (
-                  recommendation: any,
+                  recommendation: AnimeMedia,
                   index: number
                 ) => {
 
@@ -340,4 +337,5 @@ export default async function AnimePage({
     </main>
 
   );
+
 }

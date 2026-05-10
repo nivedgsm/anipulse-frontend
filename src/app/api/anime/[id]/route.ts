@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 
-import {
-  getAnimeById,
-} from "@/lib/anilist";
+import { getAnimeById } from "@/lib/anilist";
 
 export async function GET(
   request: Request,
@@ -22,15 +20,18 @@ export async function GET(
       await getAnimeById(id);
 
     return NextResponse.json({
-      success: true,
       data: anime,
     });
 
   } catch (error) {
 
+    console.error(
+      "Anime API Error:",
+      error
+    );
+
     return NextResponse.json(
       {
-        success: false,
         error:
           "Failed to fetch anime",
       },
@@ -40,4 +41,5 @@ export async function GET(
     );
 
   }
+
 }

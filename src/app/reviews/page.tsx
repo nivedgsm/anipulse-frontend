@@ -48,7 +48,7 @@ export default async function ReviewsPage() {
 
         <div className="space-y-10">
 
-          {reviews.map((anime: any) => {
+          {reviews.map((anime: AnimeMedia) => {
 
             const imageUrl =
               anime.coverImage

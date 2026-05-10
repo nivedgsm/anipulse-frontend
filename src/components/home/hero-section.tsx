@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FadeIn } from "@/components/shared/fade-in";
 
 interface HeroSectionProps {
-  anime: any[];
+  anime: AnimeMedia[];
 }
 
 export function HeroSection({
