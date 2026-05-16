@@ -4,7 +4,6 @@ import Link from "next/link";
 
 import { Menu } from "lucide-react";
 
-import { ThemeToggle } from "./theme-toggle";
 
 import { SearchModal } from "./search-modal";
 
@@ -82,7 +81,7 @@ export function Navbar() {
 
           <SearchModal />
 
-          <ThemeToggle />
+          
 
           {/* MOBILE MENU */}
           <Sheet>

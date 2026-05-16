@@ -150,7 +150,6 @@ export async function getUpcomingAnime() {
 export async function getAnimeById(
   id: string
 ) {
-
   const query = `
     query ($id: Int) {
 
@@ -252,35 +251,62 @@ export async function getAnimeById(
     }
   `;
 
-  const response = await fetch(
-    ANILIST_API,
-    {
-      method: "POST",
+  try {
+    const response = await fetch(
+      ANILIST_API,
+      {
+        method: "POST",
 
-      headers: {
-        "Content-Type":
-          "application/json",
-      },
-
-      next: {
-        revalidate: 3600,
-      },
-
-      body: JSON.stringify({
-        query,
-
-        variables: {
-          id: Number(id),
+        headers: {
+          "Content-Type":
+            "application/json",
+          Accept:
+            "application/json",
         },
-      }),
+
+        next: {
+          revalidate: 3600,
+        },
+
+        body: JSON.stringify({
+          query,
+
+          variables: {
+            id: Number(id),
+          },
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        "Failed to fetch anime by id"
+      );
     }
-  );
 
-  const data =
-    await response.json();
+    const data =
+      await response.json();
 
-  return data.data.Media;
+    if (data?.errors?.length) {
+      console.error(
+        "AniList getAnimeById errors:",
+        data.errors
+      );
+
+      return null;
+    }
+
+    return data?.data?.Media || null;
+  } catch (error) {
+    console.error(
+      "getAnimeById error:",
+      error
+    );
+
+    return null;
+  }
 }
+
 export async function searchAnime(
   search: string
 ) {
